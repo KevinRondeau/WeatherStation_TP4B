@@ -75,7 +75,8 @@ namespace WeatherApp.ViewModels
         /// <returns></returns>
         public bool CanGetTemp(string obj)
         {
-            
+            if (String.IsNullOrEmpty(Properties.Settings.Default.apiKey))
+                return false;
             return TemperatureService != null;
         }
 
@@ -89,8 +90,16 @@ namespace WeatherApp.ViewModels
         private async Task GetTempAsync()
         {
             CurrentTemp = await TemperatureService.GetTempAsync();
-
-            RawText = $"Time : {CurrentTemp.DateTime.ToLocalTime()} {Environment.NewLine}Temperature : {CurrentTemp.Temperature}";
+            if (CurrentTemp.Temperature == -400)
+            {
+                RawText = "Ville Non Trouver";
+            }
+            else if (CurrentTemp.Temperature == -401)
+            {
+                RawText = "ApiKey Non Disponible";
+            }
+            else
+                RawText = $"Time : {CurrentTemp.DateTime.ToLocalTime()} {Environment.NewLine}Temperature : {CurrentTemp.Temperature}";
         }
 
         public double CelsiusInFahrenheit(double c)

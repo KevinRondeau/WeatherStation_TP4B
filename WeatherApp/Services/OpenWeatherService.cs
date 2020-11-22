@@ -20,14 +20,24 @@ namespace WeatherApp.Services
         public async Task<TemperatureModel> GetTempAsync()
         {
             var temp = await owp.GetCurrentWeatherAsync();
-
-            var result = new TemperatureModel
+            var result = new TemperatureModel();
+            if (temp.Cod==400||temp.Cod==404)
             {
-                DateTime = DateTime.UnixEpoch.AddSeconds(temp.DateTime),
-                Temperature = temp.Main.Temperature
+                result.Temperature = -400;
+                return result;
+            }else if (temp.Cod == 401)
+            {
+                result.Temperature = -401;
+                return result;
+            }
+           else
+            {
+                result.DateTime = DateTime.UnixEpoch.AddSeconds(temp.DateTime);
+                result.Temperature = temp.Main.Temperature;
+                return result;
             };
 
-            return result;
+          
         }
 
         public void SetLocation(string location)

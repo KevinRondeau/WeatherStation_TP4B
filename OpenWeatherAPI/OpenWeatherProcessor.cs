@@ -30,7 +30,7 @@ namespace OpenWeatherAPI
 
         public string ApiKey { get; set; }
 
-        public string City { get; set; } = "Shawinigan";
+        public string City { get; set; }
 
         private OpenWeatherProcessor()
         {
@@ -109,11 +109,15 @@ namespace OpenWeatherAPI
                 if (response.IsSuccessStatusCode)
                 {
                     OWCurrentWeaterModel result = await response.Content.ReadAsAsync<OWCurrentWeaterModel>();
+
                     return result;
                 }
+                else
+                {
+                    OWCurrentWeaterModel result = await response.Content.ReadAsAsync<OWCurrentWeaterModel>();
 
-                return null;
-
+                    return result;
+                }
             }
         }
     }
